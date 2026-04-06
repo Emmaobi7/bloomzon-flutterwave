@@ -1,3 +1,5 @@
 node_moodules
 /node_moodules
 node_moodules/
+.env
+.env*
