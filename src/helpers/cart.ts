@@ -18,24 +18,26 @@ export async function clearOrderItemsFromCart(
     const orderBaseUrl = process.env.ORDER_URL as string;
     const cartBaseUrl = process.env.CART_URL as string;
 
-    // here am fetching the ids associated with the order
+    console.log(`[Cart Helper] Fetching item IDs for order: ${orderId}`);
     const idsResp = await axios.get<OrderIdsResponse>(
       `${orderBaseUrl}/ids/${orderId}`,
       { timeout: 10000 },
     );
 
-    console.log("IDs==>:", idsResp.data);
+    console.log(`[Cart Helper] Order IDs Response for ${orderId}:`, idsResp.data);
 
     if (!idsResp.data.success || !idsResp.data.data) {
+      console.warn(`[Cart Helper] Failed to fetch items for order ${orderId}`);
       return { success: false, message: "Failed to fetch order item IDs" };
     }
 
     const itemIds = idsResp.data.data.item_ids;
     if (!itemIds || itemIds.length === 0) {
+      console.log(`[Cart Helper] No items found to clear for order ${orderId}`);
       return { success: true, message: "No items found for order" };
     }
 
-    // here am removing the items from the cart using PATCH and include the owner
+    console.log(`[Cart Helper] Attempting to remove items ${itemIds.join(', ')} from cart for user ${userId}`);
     const removeResp = await axios.patch(
       `${cartBaseUrl}`,
       { user_id: userId, cart_item_id: itemIds },
@@ -43,9 +45,10 @@ export async function clearOrderItemsFromCart(
     );
 
     if (removeResp.data.success) {
-       console.log("Cart items successfully cleared.");
+       console.log(`[Cart Helper] Successfully cleared ${itemIds.length} items from cart.`);
       return { success: true, message: "Cart items cleared successfully" };
     } else {
+      console.error(`[Cart Helper] Failed to clear items: ${removeResp.data.message}`);
       return {
         success: false,
         message: removeResp.data.message || "Failed to remove cart items",

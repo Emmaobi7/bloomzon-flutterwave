@@ -2,17 +2,17 @@ import { DataTypes, Model } from 'sequelize';
 import sequelize from '../db';
 
 export class PaymentTransaction extends Model {
-  public id!: number;
-  public tx_ref!: string;
-  public flw_transaction_id!: string | null;
-  public amount!: number;
-  public currency!: string;
-  public status!: string;
-  public order_id!: number | null;
-  public user_id!: number | null;
-  public customer_email!: string | null;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: number;
+  declare tx_ref: string;
+  declare flw_transaction_id: string | null;
+  declare amount: number;
+  declare currency: string;
+  declare status: string;
+  declare order_id: number | null;
+  declare user_id: number | null;
+  declare customer_email: string | null;
+  declare readonly createdAt: Date;
+  declare readonly updatedAt: Date;
 }
 
 PaymentTransaction.init(
