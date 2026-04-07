@@ -1,5 +1,5 @@
-node_moodules
-/node_moodules
-node_moodules/
+node_modules
+/node_modules
+node_modules/
 .env
 .env*
